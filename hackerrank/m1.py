@@ -5,7 +5,7 @@ import sys
 #
 #   Given 1 <= N <= 10000, numbers within range [1, 2**10000] verify that all of them have
 #   single set bit in different positions
-#
+#   Constraints: 2.6 seconds, 9 MB
 
 #
 #               Initial version
