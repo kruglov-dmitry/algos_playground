@@ -2,82 +2,20 @@
 
 import sys
 
+#
+#   Given 1 <= N <= 10000, numbers within range [1, 2**10000] verify that all of them have
+#   single set bit in different positions
+#
 
-def count_trailing_zeros(x):
-    """
-    :param x: x < 2**10000, yeap, this freakingly huge number
-    :return: number of trailing zeros from RIGHT site of binary representation
-    """
+#
+#               Initial version
+#
 
-    if x == 0:
-        return -10
-    n = 0
-
-    if x & 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0:
-        n += 5000
-        x >>= 5000
-
-    if x & 0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0:
-        n += 2500
-        x >>= 2500
-
-    if x & 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0:
-        n += 1250
-        x >>= 1250
-
-    if x & 0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0:
-        n += 625
-        x >>= 625
-
-    if x & 0x0000000000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0:
-        n += 312
-        x >>= 312
-
-    # 313
-    if x & 0x0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF == 0:
-        n += 156
-        x >>= 156
-
-    # 157
-    if x & 0x00000000000000000000FFFFFFFFFFFFFFFFFFFF == 0:
-        n += 80
-        x >>= 80
-
-    # 77
-    if x & 0x000000001FFFFFFFFFFF == 0:
-        n += 45
-        x >>= 45
-
-    #
-    if x & 0x00000000FFFFFFFF == 0:
-        n += 32
-        x >>= 32
-    if x & 0x0000FFFF == 0:
-        n += 16
-        x >>= 16
-    if x & 0x000000FF == 0:
-        n += 8
-        x >>= 8
-    if x & 0x0000000F == 0:
-        n += 4
-        x >>= 4
-    if x & 0x00000003 == 0:
-        n += 2
-        x >>= 2
-    if x & 0x00000001 == 0:
-        n += 1
-    return n
-
-
-# @timecall
 def count_leading_zeros(x):
     """
     :param x: x < 2**10000,  yeap, this freakingly huge number
     :return: number of leading zeros from LEFT site of binary representation
     """
-    if x == 0:
-        return -10
-
     n = 10000
     y = x >> 5000
     if y != 0:
@@ -165,6 +103,66 @@ def count_leading_zeros(x):
         return n - 2
     return n - x
 
+def count_trailing_zeros(x):
+    """
+    :param x: x < 2**10000, yeap, this freakingly huge number
+    :return: number of trailing zeros from RIGHT site of binary representation
+    """
+    n = 0
+
+    if x & 2**5000-1 == 0:
+        n += 5000
+        x >>= 5000
+
+    if x & 2**2500-1 == 0:
+        n += 2500
+        x >>= 2500
+
+    if x & 2**1250-1 == 0:
+        n += 1250
+        x >>= 1250
+
+    if x & 2**625-1 == 0:
+        n += 625
+        x >>= 625
+
+    if x & 2**312-1 == 0:
+        n += 312
+        x >>= 312
+
+    # 313
+    if x & 2**156-1 == 0:
+        n += 156
+        x >>= 156
+
+    # 157
+    if x & 2**80-1 == 0:
+        n += 80
+        x >>= 80
+
+    # 77
+    if x & 2**45-1 == 0:
+        n += 45
+        x >>= 45
+    #
+    if x & 0xFFFFFFFF == 0:
+        n += 32
+        x >>= 32
+    if x & 0xFFFF == 0:
+        n += 16
+        x >>= 16
+    if x & 0xFF == 0:
+        n += 8
+        x >>= 8
+    if x & 0xF == 0:
+        n += 4
+        x >>= 4
+    if x & 0x3 == 0:
+        n += 2
+        x >>= 2
+    if x & 0x1 == 0:
+        n += 1
+    return n
 
 def count_set_bit(n):
     cnt = 0
@@ -173,20 +171,6 @@ def count_set_bit(n):
         n >>= 1
 
     return cnt
-
-#
-# last_one = count_trailing_zeros(2**9999+2)
-# first_one = count_leading_zeros(2**9999+2)
-#
-# print last_one, first_one, count_set_bit(2**9999+2)
-#
-# last_one = count_trailing_zeros(2**100)
-# first_one = count_leading_zeros(2**100)
-#
-# print last_one, first_one, count_set_bit(2**100)
-
-# print wtf_64(2**32)
-# print count_leading_zeros(2**32)
 
 @timecall
 def test_case_1():
@@ -254,3 +238,175 @@ if __name__ == '__main__':
             print(0)
 
         num_test_cases -= 1
+
+#
+#               Initial speed & memory optimized version
+#
+
+def ctz(x):
+    n = 0
+    for d in [5000, 2500, 1250, 625, 313, 156, 78, 39, 20, 10, 5, 3, 2, 1]:
+        if x & (1<< d) - 1 == 0:
+            n += d
+            x >>= d
+    return n
+
+
+def clz(x):
+    n = 10000
+    for d in [5000, 2500, 1250, 625, 313, 156, 78, 39, 20, 10, 5, 3, 2, 1]:
+        y = x >> d
+        if y != 0:
+            x = y
+            n -= d
+
+    return n - x
+
+
+if __name__ == '__main__':
+
+    tc = int(sys.stdin.readline().strip())
+
+    while tc:
+        sz = int(sys.stdin.readline().strip())
+        skip = False
+        rr = 0
+        cnt = 0
+        for buf in sys.stdin:
+            if not skip:
+                nn = int(buf)
+                if nn != 0:
+                    if ctz(nn) + clz(nn) == 9999:
+                        rr = rr | nn
+                    else:
+                        skip = True
+
+            cnt += 1
+            if cnt == sz:
+                break
+
+        cnt = 0
+        while rr:
+            cnt += rr & 1
+            rr >>= 1
+
+        if cnt == sz:
+            print(1)
+        else:
+            print(0)
+
+        tc -= 1
+
+#
+#               Version with manual buffered reading from stdin
+#               NOTE: no any memory advantage in comparisson to generators
+#               approach
+#
+
+if __name__ == '__main__':
+
+    num_test_cases = int(sys.stdin.readline().strip())
+
+    sz = 0
+    cnt = 0
+    last_num = 0
+    rr = 0
+    error = False
+
+    while num_test_cases:
+        buf = sys.stdin.read(1000)
+        ll = len(buf)
+        if ll == 0:
+            print(num_test_cases)
+            raise
+        start = end = 0
+        while end != ll:
+            if buf[end] != '\n':
+                end += 1
+            elif sz == 0:
+                if end != start:
+                    sz = last_num*10**(end-start) + int(buf[start:end])
+                else:
+                    sz = last_num
+                last_num = 0
+                end += 1
+                start = end
+            else:
+                if not error:
+                    if end != start:
+                        num = last_num*10**(end-start) + int(buf[start:end])
+                    else:
+                        num = last_num
+
+                    i0 = ctz(num)
+                    i1 = clz(num)
+
+                    if i1 + i0 + 1 != 10000:
+                        error = True
+                    else:
+                        rr = rr | num   # ???
+
+                last_num = 0
+                end += 1
+                start = end
+
+                cnt += 1
+                if sz == cnt:
+                    if error:
+                        print(0)
+                    else:
+                        if count_set_bit(rr) == sz:
+                            print(1)
+                        else:
+                            print(0)
+
+                    num_test_cases -= 1
+                    rr = 0
+                    error = False
+                    cnt = 0
+                    sz = 0
+
+
+        if start != end:
+            last_num = last_num*10**(end-start) + int(buf[start:end])
+
+    print (resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+
+
+
+#
+#           Final memory & speed optimized version
+#
+
+import sys
+
+tc = int(sys.stdin.readline().strip())
+
+while tc:
+    sz = int(sys.stdin.readline().strip())
+    rr = 1 << sz
+
+    while sz:
+        x1 = x2 = int(sys.stdin.readline().strip())
+        if rr != -1:
+            n1 = 0
+            n2 = 10000
+            for d in (5000, 2500, 1250, 625, 313, 156, 78, 39, 20, 10, 5, 3, 2, 1):
+                if x1 & ((1 << d) - 1) == 0:
+                    n1 += d
+                    x1 >>= d
+                y = x2 >> d
+                if y:
+                    x2 = y
+                    n2 -= d
+            n2 -= x2
+
+            if n1 + n2 == 9999:
+                rr |= (1 << n1)
+            else:
+                rr = -1
+        sz -= 1
+
+    print(int(rr != -1 and ((rr + 1) & rr) == 0))
+
+    tc -= 1
