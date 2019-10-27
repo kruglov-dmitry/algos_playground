@@ -1,4 +1,6 @@
 """
+https://leetcode.com/problems/string-compression
+
 Given string, possible empty:
 AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB
 
@@ -11,37 +13,62 @@ Notes:
 """
 
 
-def rle(a):
+def rle(chars):
+    ll = len(chars)
+
+    if ll < 2:
+        return ll
+
+    r_idx, w_idx = 1, 0
+
+    while r_idx < ll:
+        cnt = 1
+        while r_idx < ll and chars[r_idx - 1] == chars[r_idx]:
+            r_idx += 1
+            cnt += 1
+
+        chars[w_idx] = chars[r_idx - 1]
+        w_idx += 1
+
+        if cnt > 1:
+            cur_cnt = str(cnt)
+            for s in cur_cnt:
+                chars[w_idx] = s
+                w_idx += 1
+        if r_idx == ll - 1:
+            chars[w_idx] = chars[r_idx]
+            w_idx += 1
+
+        r_idx += 1
+
+    return w_idx
+
+
+def rle2(a):
+    ll = len(a)
+    if ll < 2:
+        return ll
+
     w_idx, r_idx = 1, 1
 
-    # [A, B, C]
-    # AAAABBBCCXYZDDDDEEEFFFAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBB
-
-    # [G, A, A, A, B, B, C]
-    #  0  1  2  3  4  5  6
-    # GA3B2C
-    # 012345
-    # iterations
-
-    # w_idx 1
-    # w_idx 3
-    # w_idx 5
-
-    while r_idx < len(a):
-        cnt = 0
+    while r_idx < ll:
         if a[r_idx] == a[r_idx - 1]:
-            while r_idx < len(a) and a[r_idx] == a[r_idx - 1]:
+            cnt = 1
+            while r_idx < ll and a[r_idx] == a[r_idx - 1]:
                 r_idx += 1
                 cnt += 1
 
-            if cnt > 0:
-                new_symbols = str(cnt + 1)
-                for b in new_symbols:
-                    a[w_idx] = b
+            for b in str(cnt):
+                a[w_idx] = b
+                w_idx += 1
+            if r_idx == w_idx and r_idx < ll:
+                if a[w_idx - 1] == a[r_idx]:
+                    r_idx += 1
                     w_idx += 1
+
         else:
+            a[w_idx] = a[r_idx]
+            w_idx += 1
             r_idx += 1
 
-        w_idx += 1
-
-    return a[:w_idx]
+    return w_idx
