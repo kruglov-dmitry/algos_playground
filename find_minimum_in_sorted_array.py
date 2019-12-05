@@ -4,18 +4,17 @@
 
 
 def helper(l, h, nums):
-    def helper(l, h, nums):
-        u = h - l
-        if u < 2:
-            return min(nums[l], nums[h])
+    u = h - l
+    if u < 2:
+        return min(nums[l], nums[h])
 
-        mid = l + u / 2 + u % 2
-        if nums[l] < nums[h]:
-            return helper(l, mid, nums)
-        if nums[mid] > nums[l]:
-            return helper(mid, h, nums)
-
+    mid = l + u / 2 + u % 2
+    if nums[l] < nums[h]:
         return helper(l, mid, nums)
+    if nums[mid] > nums[l]:
+        return helper(mid, h, nums)
+
+    return helper(l, mid, nums)
 
 
 def find_minimum_of_sorted_array(nums):
